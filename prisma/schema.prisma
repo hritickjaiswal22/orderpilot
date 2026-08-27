@@ -1,0 +1,216 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+// ─────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────
+
+enum OrderStatus {
+  IN_PROGRESS @map("in-progress")
+  FAILED      @map("failed")
+  SUCCESS     @map("success")
+  DELIVERED   @map("delivered")
+
+  @@map("order_status")
+}
+
+enum TransactionStatus {
+  IN_PROGRESS @map("in-progress")
+  FAILED      @map("failed")
+  SUCCESS     @map("success")
+
+  @@map("transaction_status")
+}
+
+enum RefundStatus {
+  IN_PROGRESS @map("in-progress")
+  FAILED      @map("failed")
+  SUCCESS     @map("success")
+
+  @@map("refund_status")
+}
+
+enum SupportStatus {
+  IN_PROGRESS @map("in-progress")
+  RESOLVED    @map("resolved")
+
+  @@map("support_status")
+}
+
+
+// ─────────────────────────────────────────────
+// USERS
+// ─────────────────────────────────────────────
+
+model User {
+  id      String @id @default(uuid()) @db.Uuid
+  email   String @unique @db.VarChar(100)
+  name    String @db.VarChar(100)
+  address String @db.VarChar(255)
+
+  orders         Order[]
+  orderItems     OrderItem[]
+  transactions   Transaction[]
+  supportTickets Support[]
+
+  @@map("users")
+}
+
+
+// ─────────────────────────────────────────────
+// PRODUCTS
+// ─────────────────────────────────────────────
+
+model Product {
+  id          String  @id @default(uuid()) @db.Uuid
+  name        String  @db.VarChar(255)
+  description String  @db.Text
+  images      Json    @db.JsonB
+  amount      Decimal @db.Decimal(15, 2)
+
+  orderItems OrderItem[]
+
+  @@map("products")
+}
+
+
+// ─────────────────────────────────────────────
+// ORDERS
+// ─────────────────────────────────────────────
+
+model Order {
+  id                 String      @id @default(uuid()) @db.Uuid
+  userId             String      @db.Uuid @map("user_id")
+  originalPaidAmount Decimal     @db.Decimal(15, 2) @map("original_paid_amount")
+  status             OrderStatus
+  createdAt          DateTime    @default(now()) @db.Timestamptz(6) @map("created_at")
+  updatedAt          DateTime    @updatedAt @db.Timestamptz(6) @map("updated_at")
+
+  user         User          @relation(fields: [userId], references: [id])
+  items        OrderItem[]
+  transactions Transaction[]
+  refunds      Refund[]
+
+  @@index([userId, createdAt])
+  @@map("orders")
+}
+
+
+// ─────────────────────────────────────────────
+// ORDER ITEMS
+// ─────────────────────────────────────────────
+
+model OrderItem {
+  id                 String   @id @default(uuid()) @db.Uuid
+  orderId            String   @db.Uuid @map("order_id")
+  productId          String   @db.Uuid @map("product_id")
+
+  // Denormalized for faster customer/order-item queries.
+  userId String @db.Uuid @map("user_id")
+
+  originalUnitAmount Decimal   @db.Decimal(15, 2) @map("original_unit_amount")
+  quantity           Int       @db.SmallInt
+  createdAt          DateTime  @default(now()) @db.Timestamptz(6) @map("created_at")
+  updatedAt          DateTime  @updatedAt @db.Timestamptz(6) @map("updated_at")
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  refunds Refund[]
+
+  // Same product cannot appear twice in an order.
+  @@unique([orderId, productId])
+
+  @@index([orderId])
+  @@index([productId])
+  @@index([userId])
+
+  @@map("order_items")
+}
+
+
+// ─────────────────────────────────────────────
+// TRANSACTIONS
+// ─────────────────────────────────────────────
+
+model Transaction {
+  id                 String            @id @default(uuid()) @db.Uuid
+  orderId            String            @db.Uuid @map("order_id")
+
+  // Denormalized for faster customer-level transaction queries.
+  userId String @db.Uuid @map("user_id")
+
+  status             TransactionStatus
+  originalPaidAmount Decimal           @db.Decimal(15, 2) @map("original_paid_amount")
+  createdAt          DateTime          @default(now()) @db.Timestamptz(6) @map("created_at")
+  updatedAt          DateTime          @updatedAt @db.Timestamptz(6) @map("updated_at")
+
+  order Order @relation(fields: [orderId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  refunds Refund[]
+
+  @@index([orderId])
+  @@index([userId, createdAt])
+
+  @@map("transactions")
+}
+
+
+// ─────────────────────────────────────────────
+// REFUNDS
+// ─────────────────────────────────────────────
+
+model Refund {
+  id            String       @id @default(uuid()) @db.Uuid
+  orderId       String       @db.Uuid @map("order_id")
+  orderItemId   String       @db.Uuid @map("order_item_id")
+  transactionId String       @db.Uuid @map("transaction_id")
+
+  amount Decimal      @db.Decimal(15, 2)
+  status RefundStatus
+  reason String       @db.Text
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6) @map("created_at")
+  updatedAt DateTime @updatedAt @db.Timestamptz(6) @map("updated_at")
+
+  order       Order       @relation(fields: [orderId], references: [id])
+  orderItem   OrderItem   @relation(fields: [orderItemId], references: [id])
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+
+  // Only one refund per order item.
+  @@unique([orderId, orderItemId])
+
+  @@index([transactionId])
+  @@index([orderItemId])
+
+  @@map("refunds")
+}
+
+
+// ─────────────────────────────────────────────
+// SUPPORT
+// ─────────────────────────────────────────────
+
+model Support {
+  id        String        @id @default(uuid()) @db.Uuid
+  userId    String        @db.Uuid @map("user_id")
+  issue     String        @db.Text
+  status    SupportStatus
+  createdAt DateTime      @default(now()) @db.Timestamptz(6) @map("created_at")
+  updatedAt DateTime      @updatedAt @db.Timestamptz(6) @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+
+  @@map("support")
+}
