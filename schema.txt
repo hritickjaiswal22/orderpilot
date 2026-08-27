@@ -1,4 +1,4 @@
-v1
+v2
 
 users {
 id : UUID; (primary-key)
@@ -37,6 +37,8 @@ created_at: TIMESTAMPTZ;
 updated_at: TIMESTAMPTZ;
 }
 
+For order_items table order_id and product_id MUST be unique DB constraint
+
 type TRANSACTION_STATUS = 'in-progress' | 'failed' | 'success';
 
 transactions {
@@ -62,6 +64,8 @@ reason: TEXT;
 created_at: TIMESTAMPTZ;
 updated_at: TIMESTAMPTZ;
 }
+
+For refunds table order_id and order_item_id MUST be unique DB constraint
 
 type SUPPORT_STATUS = 'in-progress' | 'resolved';
 
