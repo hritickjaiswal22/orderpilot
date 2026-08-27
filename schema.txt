@@ -1,0 +1,77 @@
+v1
+
+users {
+id : UUID; (primary-key)
+email: VARCHAR(100); (unique)
+name: VARCHAR(100);
+address: VARCHAR(255); 
+}
+
+products {
+id: UUID; (primary-key)
+name: VARCHAR(255);
+description: TEXT;
+images: JSONB;
+amount: NUMERIC(15, 2);
+}
+
+type ORDER_STATUS = 'in-progress' | 'failed' | 'success' | 'delivered';
+
+orders {
+id: UUID; (primary-key)
+user_id: UUID; (foreign-key)
+original_paid_amount: NUMERIC(15, 2);
+status: ORDER_STATUS
+created_at: TIMESTAMPTZ;
+updated_at: TIMESTAMPTZ;
+}
+
+order_items {
+id: UUID; (primary-key)
+order_id: UUID; (foreign-key)
+product_id: UUID; (foreign-key)
+original_unit_amount: NUMERIC(15, 2);
+quantity: SMALLINT; (+ve only)
+user_id: UUID; (foreign-key)
+created_at: TIMESTAMPTZ;
+updated_at: TIMESTAMPTZ;
+}
+
+type TRANSACTION_STATUS = 'in-progress' | 'failed' | 'success';
+
+transactions {
+id: UUID; (primary-key)
+order_id: UUID; (foreign-key)
+user_id: UUID; (foreign-key)
+status: TRANSACTION_STATUS;
+original_paid_amount: NUMERIC(15, 2);
+created_at: TIMESTAMPTZ;
+updated_at: TIMESTAMPTZ;
+}
+
+type REFUND_STATUS = 'in-progress' | 'failed' | 'success';
+
+refunds {
+id: UUID; (primary-key)
+order_id: UUID; (foreign-key)
+order_item_id: UUID; (foreign-key)
+transaction_id: UUID; (foreign-key)
+amount: NUMERIC(15, 2);
+status: REFUND_STATUS;
+reason: TEXT;
+created_at: TIMESTAMPTZ;
+updated_at: TIMESTAMPTZ;
+}
+
+type SUPPORT_STATUS = 'in-progress' | 'resolved';
+
+support {
+id: UUID; (primary-key)
+user_id: UUID; (foreign-key)
+issue: TEXT;
+status : SUPPORT_STATUS;
+created_at: TIMESTAMPTZ;
+updated_at: TIMESTAMPTZ;
+}
+
+Refund would only be allowed if transaction.status = 'success' && order.status = 'success';
