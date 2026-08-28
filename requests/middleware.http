@@ -1,4 +1,4 @@
 @baseUrl = http://localhost:3000/api
 
 GET {{baseUrl}}/me
-Cookie: refresh_token=ABC;
+Cookie: refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIyZjg1ZDI4MC01MjY0LTQ2ZDktOWI2ZS01MjY1YjY5NDY4ZjAiLCJpYXQiOjE3ODc5MDA4MDcsImV4cCI6MTc4ODUwNTYwN30.TLZ9MjmbjMNT1FW6GZ0QjEzMCeq3yXVw3raQSoXI-MH;
