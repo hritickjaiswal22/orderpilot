@@ -5,6 +5,7 @@ import { jwtVerify } from "jose";
 import {
   ACCESS_TOKEN_SECRET_KEY,
   REFRESH_TOKEN_SECRET_KEY,
+  JWTpayload,
 } from "@/lib/tokens";
 import {
   getRefreshTokenCookieSettings,
@@ -16,7 +17,7 @@ const PUBLIC_PAGES = ["/signin"];
 const AUTH_API_PREFIX = "/api/auth";
 
 type VerifyResult =
-  | { success: true }
+  | { success: true; payload: JWTpayload }
   | { success: false; expired: boolean; error: unknown };
 
 async function safeVerifyToken(
@@ -24,9 +25,9 @@ async function safeVerifyToken(
   secret: Uint8Array,
 ): Promise<VerifyResult> {
   try {
-    const { payload } = await jwtVerify(token, secret);
+    const { payload } = await jwtVerify<JWTpayload>(token, secret);
 
-    return { success: true };
+    return { success: true, payload };
   } catch (error: any) {
     return {
       success: false,
@@ -73,7 +74,14 @@ export async function middleware(request: NextRequest) {
       );
 
       if (accessResult.success) {
-        return NextResponse.next(); // Valid access token
+        const requestHeaders = new Headers(request.headers);
+        requestHeaders.set("x-user-id", accessResult.payload.userId);
+
+        return NextResponse.next({
+          request: {
+            headers: requestHeaders,
+          },
+        }); // Valid access token
       }
 
       if (!accessResult.expired) {
@@ -114,6 +122,7 @@ export async function middleware(request: NextRequest) {
 
     request.cookies.set("access_token", data.accessToken);
     request.cookies.set("refresh_token", data.refreshToken);
+    request.headers.set("x-user-id", refreshResult.payload.userId);
 
     const response = NextResponse.next({
       request: {
@@ -139,6 +148,7 @@ export const config = {
     "/",
     "/signin",
     "/api/me",
+    "/api/users",
     // Add all your protected routes here.
     // The "/:path*" suffix ensures all sub-routes (like /accounts/settings) are also protected.
     // "/dashboard/:path*",
