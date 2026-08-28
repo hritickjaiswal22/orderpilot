@@ -1,0 +1,9 @@
+@baseUrl = http://localhost:3000/api
+
+### Auth Endpoint
+POST {{baseUrl}}/auth
+Content-Type: application/json
+
+{
+  "userId": "2f85d280-5264-46d9-9b6e-5265b69468f0"
+}
