@@ -33,6 +33,6 @@ export const GET = async (request: NextRequest) => {
       ...user,
     });
   } catch (error) {
-    return NextResponse.json({ message: "Internal Error" }, { status: 500 });
+    return sendError("Internal Error", 500);
   }
 };

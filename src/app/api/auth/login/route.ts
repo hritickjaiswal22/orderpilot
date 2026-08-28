@@ -9,6 +9,7 @@ import {
   getAccessTokenCookieSettings,
   getRefreshTokenCookieSettings,
 } from "@/lib/cookies";
+import { sendError, sendSuccess } from "@/lib/api-response";
 
 export const POST = async (request: NextRequest) => {
   try {
@@ -19,10 +20,7 @@ export const POST = async (request: NextRequest) => {
     if (!result.success) {
       // Extract formatted error messages
       const tree = z.treeifyError(result.error);
-      return NextResponse.json(
-        { message: "Invalid request body", errors: tree },
-        { status: 400 },
-      );
+      return sendError("Invalid request body", 400, tree);
     }
 
     const validatedData: AuthInput = result.data;
@@ -34,10 +32,7 @@ export const POST = async (request: NextRequest) => {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { message: "Unauthorized - Invalid User Id" },
-        { status: 401 },
-      );
+      return sendError("Unauthorized - Invalid User Id", 401);
     }
 
     const accessToken = await generateAccessToken(user.id);
@@ -49,17 +44,11 @@ export const POST = async (request: NextRequest) => {
       cookieStore.set(getAccessTokenCookieSettings(accessToken));
       cookieStore.set(getRefreshTokenCookieSettings(refreshToken));
 
-      return NextResponse.json(
-        { success: true, message: "Logged in successfully" },
-        { status: 200 },
-      );
+      return sendSuccess("Logged in successfully", 200);
     } else {
       throw "Error";
     }
   } catch (error) {
-    return NextResponse.json(
-      { message: "Invalid JSON body or internal error" },
-      { status: 500 },
-    );
+    return sendError("Invalid JSON body or internal error", 500);
   }
 };
