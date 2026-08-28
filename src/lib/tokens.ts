@@ -1,5 +1,7 @@
-import "dotenv/config";
+// import "dotenv/config";
 import { SignJWT } from "jose";
+
+import { AuthInput } from "@/validations/auth";
 
 /*
 Cryptographic libraries reject plain text strings because hashing and signing algorithms require **raw binary data** to execute mathematical operations.
@@ -9,16 +11,18 @@ Cryptographic libraries reject plain text strings because hashing and signing al
 * **Universal Compatibility**: `TextEncoder` is built into JavaScript natively, ensuring your string key translates safely into the exact byte array required by the cipher without needing external polyfills.
 */
 
-const ACCESS_TOKEN_SECRET_KEY = new TextEncoder().encode(
+export const ACCESS_TOKEN_SECRET_KEY = new TextEncoder().encode(
   process.env.ACCESS_TOKEN_JWT_SECRET,
 );
 
-const REFRESH_TOKEN_SECRET_KEY = new TextEncoder().encode(
+export const REFRESH_TOKEN_SECRET_KEY = new TextEncoder().encode(
   process.env.REFRESH_TOKEN_JWT_SECRET,
 );
 
+export type JWTpayload = AuthInput;
+
 export async function generateAccessToken(userId: string) {
-  return new SignJWT({ userId })
+  return new SignJWT({ userId } as JWTpayload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("15m") // 15 minutes
@@ -26,7 +30,7 @@ export async function generateAccessToken(userId: string) {
 }
 
 export async function generateRefreshToken(userId: string) {
-  return new SignJWT({ userId })
+  return new SignJWT({ userId } as JWTpayload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("7d") // 7 days
