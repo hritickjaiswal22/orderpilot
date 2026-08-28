@@ -8,6 +8,7 @@ import {
   generateRefreshToken,
   JWTpayload,
 } from "@/lib/tokens";
+import { sendError, sendSuccess } from "@/lib/api-response";
 import {
   getRefreshTokenCookieSettings,
   getAccessTokenCookieSettings,
@@ -17,7 +18,7 @@ export async function POST(request: NextRequest) {
   const refreshToken = request.cookies.get("refresh_token")?.value;
 
   if (!refreshToken) {
-    return NextResponse.json({ error: "No refresh token" }, { status: 401 });
+    return sendError("No refresh token", 401);
   }
 
   try {
@@ -47,9 +48,6 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error) {
-    return NextResponse.json(
-      { error: "Invalid refresh token" },
-      { status: 401 },
-    );
+    return sendError("Invalid refresh token", 401);
   }
 }
