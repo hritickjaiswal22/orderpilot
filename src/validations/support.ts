@@ -8,7 +8,7 @@ export const issueSchema = z.object({
 export type IssueBody = z.infer<typeof issueSchema>;
 
 export const getSupportTicketSchema = z.uuid({
-  message: "Invalid order ID format",
+  message: "Invalid support ticket ID format",
 });
 
 export type GetSupportTicketInput = z.infer<typeof getSupportTicketSchema>;
