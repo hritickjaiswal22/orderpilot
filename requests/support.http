@@ -1,0 +1,14 @@
+@baseUrl = http://localhost:3000/api
+
+### Create Support Endpoint
+POST {{baseUrl}}/support
+Content-Type: application/json
+Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIyZjg1ZDI4MC01MjY0LTQ2ZDktOWI2ZS01MjY1YjY5NDY4ZjAiLCJpYXQiOjE3ODgwMTI4MTIsImV4cCI6MTc4ODAxMzcxMn0.iOrAerdD020dBbMwBJ1AKjpRbz4BaGj4PBbE3vkxeBE;refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIyZjg1ZDI4MC01MjY0LTQ2ZDktOWI2ZS01MjY1YjY5NDY4ZjAiLCJpYXQiOjE3ODgwMTI4MTIsImV4cCI6MTc4ODYxNzYxMn0.EUN2ZhO_fod-1f8V5WevSD07mB884QyjMLHsIJMvwlg;
+
+{
+  "issue": "Product not working"
+}
+
+### Get support ticket
+GET {{baseUrl}}/support/2e882489-f035-4355-9bc9-64fc9139b16f
+Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIyZjg1ZDI4MC01MjY0LTQ2ZDktOWI2ZS01MjY1YjY5NDY4ZjAiLCJpYXQiOjE3ODgwMTI4MTIsImV4cCI6MTc4ODAxMzcxMn0.iOrAerdD020dBbMwBJ1AKjpRbz4BaGj4PBbE3vkxeBE;refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIyZjg1ZDI4MC01MjY0LTQ2ZDktOWI2ZS01MjY1YjY5NDY4ZjAiLCJpYXQiOjE3ODgwMTI4MTIsImV4cCI6MTc4ODYxNzYxMn0.EUN2ZhO_fod-1f8V5WevSD07mB884QyjMLHsIJMvwlg;
