@@ -154,6 +154,7 @@ export const config = {
     "/api/users/:path*",
     "/api/orders/:path*",
     "/api/support/:path*",
+    "/api/products/:path*",
     // Add all your protected routes here.
     // The "/:path*" suffix ensures all sub-routes (like /accounts/settings) are also protected.
     // "/dashboard/:path*",
