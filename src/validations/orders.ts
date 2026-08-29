@@ -5,3 +5,9 @@ export const getOrdersQuerySchema = z.object({
 });
 
 export type GetOrdersQueryInput = z.infer<typeof getOrdersQuerySchema>;
+
+export const getOrderItemsSchema = z.uuid({
+  message: "Invalid order ID format",
+});
+
+export type GetOrderItemsInput = z.infer<typeof getOrderItemsSchema>;
