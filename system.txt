@@ -1,2 +1,5 @@
 When an entire order with multiple order items is refunded in the refund table all the rows for each order item must be inserted
+When an order item is refunded then the entire order cannot be refunded user must request for each individual order item
+Order can be refunded only within 7 days of order
+Refunds are whole i.e. if quantity = 3 then refund for whole 3 items will  be refunded
 For refunds order.status = "success"
