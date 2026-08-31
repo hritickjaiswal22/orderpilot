@@ -62,11 +62,6 @@ export type Order = Prisma.OrderModel
  */
 export type OrderItem = Prisma.OrderItemModel
 /**
- * Model Transaction
- * 
- */
-export type Transaction = Prisma.TransactionModel
-/**
  * Model Refund
  * 
  */

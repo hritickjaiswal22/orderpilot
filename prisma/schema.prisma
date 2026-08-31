@@ -21,14 +21,6 @@ enum OrderStatus {
   @@map("order_status")
 }
 
-enum TransactionStatus {
-  IN_PROGRESS @map("in-progress")
-  FAILED      @map("failed")
-  SUCCESS     @map("success")
-
-  @@map("transaction_status")
-}
-
 enum RefundStatus {
   IN_PROGRESS @map("in-progress")
   FAILED      @map("failed")
@@ -57,7 +49,6 @@ model User {
 
   orders         Order[]
   orderItems     OrderItem[]
-  transactions   Transaction[]
   supportTickets Support[]
 
   @@map("users")
@@ -95,7 +86,6 @@ model Order {
 
   user         User          @relation(fields: [userId], references: [id])
   items        OrderItem[]
-  transactions Transaction[]
   refunds      Refund[]
 
   @@index([userId, createdAt])
@@ -138,34 +128,6 @@ model OrderItem {
 
 
 // ─────────────────────────────────────────────
-// TRANSACTIONS
-// ─────────────────────────────────────────────
-
-model Transaction {
-  id                 String            @id @default(uuid()) @db.Uuid
-  orderId            String            @db.Uuid @map("order_id")
-
-  // Denormalized for faster customer-level transaction queries.
-  userId String @db.Uuid @map("user_id")
-
-  status             TransactionStatus
-  originalPaidAmount Decimal           @db.Decimal(15, 2) @map("original_paid_amount")
-  createdAt          DateTime          @default(now()) @db.Timestamptz(6) @map("created_at")
-  updatedAt          DateTime          @updatedAt @db.Timestamptz(6) @map("updated_at")
-
-  order Order @relation(fields: [orderId], references: [id])
-  user  User  @relation(fields: [userId], references: [id])
-
-  refunds Refund[]
-
-  @@index([orderId])
-  @@index([userId, createdAt])
-
-  @@map("transactions")
-}
-
-
-// ─────────────────────────────────────────────
 // REFUNDS
 // ─────────────────────────────────────────────
 
@@ -173,7 +135,6 @@ model Refund {
   id            String       @id @default(uuid()) @db.Uuid
   orderId       String       @db.Uuid @map("order_id")
   orderItemId   String       @db.Uuid @map("order_item_id")
-  transactionId String       @db.Uuid @map("transaction_id")
 
   amount Decimal      @db.Decimal(15, 2)
   status RefundStatus
@@ -184,12 +145,10 @@ model Refund {
 
   order       Order       @relation(fields: [orderId], references: [id])
   orderItem   OrderItem   @relation(fields: [orderItemId], references: [id])
-  transaction Transaction @relation(fields: [transactionId], references: [id])
 
   // Only one refund per order item.
   @@unique([orderId, orderItemId])
 
-  @@index([transactionId])
   @@index([orderItemId])
 
   @@map("refunds")

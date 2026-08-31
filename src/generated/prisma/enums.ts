@@ -19,15 +19,6 @@ export const OrderStatus = {
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
 
 
-export const TransactionStatus = {
-  IN_PROGRESS: 'IN_PROGRESS',
-  FAILED: 'FAILED',
-  SUCCESS: 'SUCCESS'
-} as const
-
-export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]
-
-
 export const RefundStatus = {
   IN_PROGRESS: 'IN_PROGRESS',
   FAILED: 'FAILED',

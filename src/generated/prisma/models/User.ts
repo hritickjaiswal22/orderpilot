@@ -176,7 +176,6 @@ export type UserWhereInput = {
   address?: Prisma.StringFilter<"User"> | string
   orders?: Prisma.OrderListRelationFilter
   orderItems?: Prisma.OrderItemListRelationFilter
-  transactions?: Prisma.TransactionListRelationFilter
   supportTickets?: Prisma.SupportListRelationFilter
 }
 
@@ -187,7 +186,6 @@ export type UserOrderByWithRelationInput = {
   address?: Prisma.SortOrder
   orders?: Prisma.OrderOrderByRelationAggregateInput
   orderItems?: Prisma.OrderItemOrderByRelationAggregateInput
-  transactions?: Prisma.TransactionOrderByRelationAggregateInput
   supportTickets?: Prisma.SupportOrderByRelationAggregateInput
 }
 
@@ -201,7 +199,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   address?: Prisma.StringFilter<"User"> | string
   orders?: Prisma.OrderListRelationFilter
   orderItems?: Prisma.OrderItemListRelationFilter
-  transactions?: Prisma.TransactionListRelationFilter
   supportTickets?: Prisma.SupportListRelationFilter
 }, "id" | "email">
 
@@ -232,7 +229,6 @@ export type UserCreateInput = {
   address: string
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   orderItems?: Prisma.OrderItemCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   supportTickets?: Prisma.SupportCreateNestedManyWithoutUserInput
 }
 
@@ -243,7 +239,6 @@ export type UserUncheckedCreateInput = {
   address: string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   orderItems?: Prisma.OrderItemUncheckedCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   supportTickets?: Prisma.SupportUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -254,7 +249,6 @@ export type UserUpdateInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   orderItems?: Prisma.OrderItemUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   supportTickets?: Prisma.SupportUpdateManyWithoutUserNestedInput
 }
 
@@ -265,7 +259,6 @@ export type UserUncheckedUpdateInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   orderItems?: Prisma.OrderItemUncheckedUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   supportTickets?: Prisma.SupportUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -348,20 +341,6 @@ export type UserUpdateOneRequiredWithoutOrderItemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrderItemsInput, Prisma.UserUpdateWithoutOrderItemsInput>, Prisma.UserUncheckedUpdateWithoutOrderItemsInput>
 }
 
-export type UserCreateNestedOneWithoutTransactionsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTransactionsInput, Prisma.UserUncheckedCreateWithoutTransactionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTransactionsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutTransactionsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTransactionsInput, Prisma.UserUncheckedCreateWithoutTransactionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTransactionsInput
-  upsert?: Prisma.UserUpsertWithoutTransactionsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTransactionsInput, Prisma.UserUpdateWithoutTransactionsInput>, Prisma.UserUncheckedUpdateWithoutTransactionsInput>
-}
-
 export type UserCreateNestedOneWithoutSupportTicketsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSupportTicketsInput, Prisma.UserUncheckedCreateWithoutSupportTicketsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupportTicketsInput
@@ -382,7 +361,6 @@ export type UserCreateWithoutOrdersInput = {
   name: string
   address: string
   orderItems?: Prisma.OrderItemCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   supportTickets?: Prisma.SupportCreateNestedManyWithoutUserInput
 }
 
@@ -392,7 +370,6 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   name: string
   address: string
   orderItems?: Prisma.OrderItemUncheckedCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   supportTickets?: Prisma.SupportUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -418,7 +395,6 @@ export type UserUpdateWithoutOrdersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   orderItems?: Prisma.OrderItemUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   supportTickets?: Prisma.SupportUpdateManyWithoutUserNestedInput
 }
 
@@ -428,7 +404,6 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   orderItems?: Prisma.OrderItemUncheckedUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   supportTickets?: Prisma.SupportUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -438,7 +413,6 @@ export type UserCreateWithoutOrderItemsInput = {
   name: string
   address: string
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   supportTickets?: Prisma.SupportCreateNestedManyWithoutUserInput
 }
 
@@ -448,7 +422,6 @@ export type UserUncheckedCreateWithoutOrderItemsInput = {
   name: string
   address: string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   supportTickets?: Prisma.SupportUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -474,7 +447,6 @@ export type UserUpdateWithoutOrderItemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   supportTickets?: Prisma.SupportUpdateManyWithoutUserNestedInput
 }
 
@@ -484,63 +456,6 @@ export type UserUncheckedUpdateWithoutOrderItemsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   address?: Prisma.StringFieldUpdateOperationsInput | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  supportTickets?: Prisma.SupportUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutTransactionsInput = {
-  id?: string
-  email: string
-  name: string
-  address: string
-  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
-  orderItems?: Prisma.OrderItemCreateNestedManyWithoutUserInput
-  supportTickets?: Prisma.SupportCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutTransactionsInput = {
-  id?: string
-  email: string
-  name: string
-  address: string
-  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
-  orderItems?: Prisma.OrderItemUncheckedCreateNestedManyWithoutUserInput
-  supportTickets?: Prisma.SupportUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutTransactionsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutTransactionsInput, Prisma.UserUncheckedCreateWithoutTransactionsInput>
-}
-
-export type UserUpsertWithoutTransactionsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutTransactionsInput, Prisma.UserUncheckedUpdateWithoutTransactionsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutTransactionsInput, Prisma.UserUncheckedCreateWithoutTransactionsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutTransactionsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutTransactionsInput, Prisma.UserUncheckedUpdateWithoutTransactionsInput>
-}
-
-export type UserUpdateWithoutTransactionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
-  orderItems?: Prisma.OrderItemUpdateManyWithoutUserNestedInput
-  supportTickets?: Prisma.SupportUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutTransactionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
-  orderItems?: Prisma.OrderItemUncheckedUpdateManyWithoutUserNestedInput
   supportTickets?: Prisma.SupportUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -551,7 +466,6 @@ export type UserCreateWithoutSupportTicketsInput = {
   address: string
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   orderItems?: Prisma.OrderItemCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSupportTicketsInput = {
@@ -561,7 +475,6 @@ export type UserUncheckedCreateWithoutSupportTicketsInput = {
   address: string
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   orderItems?: Prisma.OrderItemUncheckedCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSupportTicketsInput = {
@@ -587,7 +500,6 @@ export type UserUpdateWithoutSupportTicketsInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   orderItems?: Prisma.OrderItemUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSupportTicketsInput = {
@@ -597,7 +509,6 @@ export type UserUncheckedUpdateWithoutSupportTicketsInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   orderItems?: Prisma.OrderItemUncheckedUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -608,14 +519,12 @@ export type UserUncheckedUpdateWithoutSupportTicketsInput = {
 export type UserCountOutputType = {
   orders: number
   orderItems: number
-  transactions: number
   supportTickets: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orders?: boolean | UserCountOutputTypeCountOrdersArgs
   orderItems?: boolean | UserCountOutputTypeCountOrderItemsArgs
-  transactions?: boolean | UserCountOutputTypeCountTransactionsArgs
   supportTickets?: boolean | UserCountOutputTypeCountSupportTicketsArgs
 }
 
@@ -646,13 +555,6 @@ export type UserCountOutputTypeCountOrderItemsArgs<ExtArgs extends runtime.Types
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TransactionWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
 export type UserCountOutputTypeCountSupportTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SupportWhereInput
 }
@@ -665,7 +567,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   address?: boolean
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
   orderItems?: boolean | Prisma.User$orderItemsArgs<ExtArgs>
-  transactions?: boolean | Prisma.User$transactionsArgs<ExtArgs>
   supportTickets?: boolean | Prisma.User$supportTicketsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -695,7 +596,6 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
   orderItems?: boolean | Prisma.User$orderItemsArgs<ExtArgs>
-  transactions?: boolean | Prisma.User$transactionsArgs<ExtArgs>
   supportTickets?: boolean | Prisma.User$supportTicketsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -707,7 +607,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     orders: Prisma.$OrderPayload<ExtArgs>[]
     orderItems: Prisma.$OrderItemPayload<ExtArgs>[]
-    transactions: Prisma.$TransactionPayload<ExtArgs>[]
     supportTickets: Prisma.$SupportPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1111,7 +1010,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   orders<T extends Prisma.User$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orderItems<T extends Prisma.User$orderItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$orderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  transactions<T extends Prisma.User$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   supportTickets<T extends Prisma.User$supportTicketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1584,30 +1482,6 @@ export type User$orderItemsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.OrderItemScalarFieldEnum | Prisma.OrderItemScalarFieldEnum[]
-}
-
-/**
- * User.transactions
- */
-export type User$transactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Transaction
-   */
-  select?: Prisma.TransactionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Transaction
-   */
-  omit?: Prisma.TransactionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.TransactionInclude<ExtArgs> | null
-  where?: Prisma.TransactionWhereInput
-  orderBy?: Prisma.TransactionOrderByWithRelationInput | Prisma.TransactionOrderByWithRelationInput[]
-  cursor?: Prisma.TransactionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.TransactionScalarFieldEnum | Prisma.TransactionScalarFieldEnum[]
 }
 
 /**
