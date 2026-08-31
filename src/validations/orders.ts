@@ -19,3 +19,12 @@ export const getEligibilityQuerySchema = z.object({
 });
 
 export type GetEligibilityInput = z.infer<typeof getEligibilityQuerySchema>;
+
+export const createRefundQuerySchema = z.object({
+  orderItemId: z
+    .uuid({ message: "Invalid orderItemId format. Must be a valid UUID." })
+    .optional(),
+  reason: z.string().min(10, "Valid reason required"),
+});
+
+export type createRefundInput = z.infer<typeof createRefundQuerySchema>;
