@@ -38,7 +38,6 @@ export type RefundMinAggregateOutputType = {
   id: string | null
   orderId: string | null
   orderItemId: string | null
-  transactionId: string | null
   amount: runtime.Decimal | null
   status: $Enums.RefundStatus | null
   reason: string | null
@@ -50,7 +49,6 @@ export type RefundMaxAggregateOutputType = {
   id: string | null
   orderId: string | null
   orderItemId: string | null
-  transactionId: string | null
   amount: runtime.Decimal | null
   status: $Enums.RefundStatus | null
   reason: string | null
@@ -62,7 +60,6 @@ export type RefundCountAggregateOutputType = {
   id: number
   orderId: number
   orderItemId: number
-  transactionId: number
   amount: number
   status: number
   reason: number
@@ -84,7 +81,6 @@ export type RefundMinAggregateInputType = {
   id?: true
   orderId?: true
   orderItemId?: true
-  transactionId?: true
   amount?: true
   status?: true
   reason?: true
@@ -96,7 +92,6 @@ export type RefundMaxAggregateInputType = {
   id?: true
   orderId?: true
   orderItemId?: true
-  transactionId?: true
   amount?: true
   status?: true
   reason?: true
@@ -108,7 +103,6 @@ export type RefundCountAggregateInputType = {
   id?: true
   orderId?: true
   orderItemId?: true
-  transactionId?: true
   amount?: true
   status?: true
   reason?: true
@@ -207,7 +201,6 @@ export type RefundGroupByOutputType = {
   id: string
   orderId: string
   orderItemId: string
-  transactionId: string
   amount: runtime.Decimal
   status: $Enums.RefundStatus
   reason: string
@@ -242,7 +235,6 @@ export type RefundWhereInput = {
   id?: Prisma.UuidFilter<"Refund"> | string
   orderId?: Prisma.UuidFilter<"Refund"> | string
   orderItemId?: Prisma.UuidFilter<"Refund"> | string
-  transactionId?: Prisma.UuidFilter<"Refund"> | string
   amount?: Prisma.DecimalFilter<"Refund"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumRefundStatusFilter<"Refund"> | $Enums.RefundStatus
   reason?: Prisma.StringFilter<"Refund"> | string
@@ -250,14 +242,12 @@ export type RefundWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Refund"> | Date | string
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
   orderItem?: Prisma.XOR<Prisma.OrderItemScalarRelationFilter, Prisma.OrderItemWhereInput>
-  transaction?: Prisma.XOR<Prisma.TransactionScalarRelationFilter, Prisma.TransactionWhereInput>
 }
 
 export type RefundOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   orderItemId?: Prisma.SortOrder
-  transactionId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reason?: Prisma.SortOrder
@@ -265,7 +255,6 @@ export type RefundOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   order?: Prisma.OrderOrderByWithRelationInput
   orderItem?: Prisma.OrderItemOrderByWithRelationInput
-  transaction?: Prisma.TransactionOrderByWithRelationInput
 }
 
 export type RefundWhereUniqueInput = Prisma.AtLeast<{
@@ -276,7 +265,6 @@ export type RefundWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.RefundWhereInput | Prisma.RefundWhereInput[]
   orderId?: Prisma.UuidFilter<"Refund"> | string
   orderItemId?: Prisma.UuidFilter<"Refund"> | string
-  transactionId?: Prisma.UuidFilter<"Refund"> | string
   amount?: Prisma.DecimalFilter<"Refund"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumRefundStatusFilter<"Refund"> | $Enums.RefundStatus
   reason?: Prisma.StringFilter<"Refund"> | string
@@ -284,14 +272,12 @@ export type RefundWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Refund"> | Date | string
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
   orderItem?: Prisma.XOR<Prisma.OrderItemScalarRelationFilter, Prisma.OrderItemWhereInput>
-  transaction?: Prisma.XOR<Prisma.TransactionScalarRelationFilter, Prisma.TransactionWhereInput>
 }, "id" | "orderId_orderItemId">
 
 export type RefundOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   orderItemId?: Prisma.SortOrder
-  transactionId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reason?: Prisma.SortOrder
@@ -311,7 +297,6 @@ export type RefundScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"Refund"> | string
   orderId?: Prisma.UuidWithAggregatesFilter<"Refund"> | string
   orderItemId?: Prisma.UuidWithAggregatesFilter<"Refund"> | string
-  transactionId?: Prisma.UuidWithAggregatesFilter<"Refund"> | string
   amount?: Prisma.DecimalWithAggregatesFilter<"Refund"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumRefundStatusWithAggregatesFilter<"Refund"> | $Enums.RefundStatus
   reason?: Prisma.StringWithAggregatesFilter<"Refund"> | string
@@ -328,14 +313,12 @@ export type RefundCreateInput = {
   updatedAt?: Date | string
   order: Prisma.OrderCreateNestedOneWithoutRefundsInput
   orderItem: Prisma.OrderItemCreateNestedOneWithoutRefundsInput
-  transaction: Prisma.TransactionCreateNestedOneWithoutRefundsInput
 }
 
 export type RefundUncheckedCreateInput = {
   id?: string
   orderId: string
   orderItemId: string
-  transactionId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status: $Enums.RefundStatus
   reason: string
@@ -352,14 +335,12 @@ export type RefundUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   order?: Prisma.OrderUpdateOneRequiredWithoutRefundsNestedInput
   orderItem?: Prisma.OrderItemUpdateOneRequiredWithoutRefundsNestedInput
-  transaction?: Prisma.TransactionUpdateOneRequiredWithoutRefundsNestedInput
 }
 
 export type RefundUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   orderItemId?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -371,7 +352,6 @@ export type RefundCreateManyInput = {
   id?: string
   orderId: string
   orderItemId: string
-  transactionId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status: $Enums.RefundStatus
   reason: string
@@ -392,7 +372,6 @@ export type RefundUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   orderItemId?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -419,7 +398,6 @@ export type RefundCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   orderItemId?: Prisma.SortOrder
-  transactionId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reason?: Prisma.SortOrder
@@ -435,7 +413,6 @@ export type RefundMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   orderItemId?: Prisma.SortOrder
-  transactionId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reason?: Prisma.SortOrder
@@ -447,7 +424,6 @@ export type RefundMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   orderItemId?: Prisma.SortOrder
-  transactionId?: Prisma.SortOrder
   amount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   reason?: Prisma.SortOrder
@@ -543,48 +519,6 @@ export type RefundUncheckedUpdateManyWithoutOrderItemNestedInput = {
   deleteMany?: Prisma.RefundScalarWhereInput | Prisma.RefundScalarWhereInput[]
 }
 
-export type RefundCreateNestedManyWithoutTransactionInput = {
-  create?: Prisma.XOR<Prisma.RefundCreateWithoutTransactionInput, Prisma.RefundUncheckedCreateWithoutTransactionInput> | Prisma.RefundCreateWithoutTransactionInput[] | Prisma.RefundUncheckedCreateWithoutTransactionInput[]
-  connectOrCreate?: Prisma.RefundCreateOrConnectWithoutTransactionInput | Prisma.RefundCreateOrConnectWithoutTransactionInput[]
-  createMany?: Prisma.RefundCreateManyTransactionInputEnvelope
-  connect?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-}
-
-export type RefundUncheckedCreateNestedManyWithoutTransactionInput = {
-  create?: Prisma.XOR<Prisma.RefundCreateWithoutTransactionInput, Prisma.RefundUncheckedCreateWithoutTransactionInput> | Prisma.RefundCreateWithoutTransactionInput[] | Prisma.RefundUncheckedCreateWithoutTransactionInput[]
-  connectOrCreate?: Prisma.RefundCreateOrConnectWithoutTransactionInput | Prisma.RefundCreateOrConnectWithoutTransactionInput[]
-  createMany?: Prisma.RefundCreateManyTransactionInputEnvelope
-  connect?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-}
-
-export type RefundUpdateManyWithoutTransactionNestedInput = {
-  create?: Prisma.XOR<Prisma.RefundCreateWithoutTransactionInput, Prisma.RefundUncheckedCreateWithoutTransactionInput> | Prisma.RefundCreateWithoutTransactionInput[] | Prisma.RefundUncheckedCreateWithoutTransactionInput[]
-  connectOrCreate?: Prisma.RefundCreateOrConnectWithoutTransactionInput | Prisma.RefundCreateOrConnectWithoutTransactionInput[]
-  upsert?: Prisma.RefundUpsertWithWhereUniqueWithoutTransactionInput | Prisma.RefundUpsertWithWhereUniqueWithoutTransactionInput[]
-  createMany?: Prisma.RefundCreateManyTransactionInputEnvelope
-  set?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  disconnect?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  delete?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  connect?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  update?: Prisma.RefundUpdateWithWhereUniqueWithoutTransactionInput | Prisma.RefundUpdateWithWhereUniqueWithoutTransactionInput[]
-  updateMany?: Prisma.RefundUpdateManyWithWhereWithoutTransactionInput | Prisma.RefundUpdateManyWithWhereWithoutTransactionInput[]
-  deleteMany?: Prisma.RefundScalarWhereInput | Prisma.RefundScalarWhereInput[]
-}
-
-export type RefundUncheckedUpdateManyWithoutTransactionNestedInput = {
-  create?: Prisma.XOR<Prisma.RefundCreateWithoutTransactionInput, Prisma.RefundUncheckedCreateWithoutTransactionInput> | Prisma.RefundCreateWithoutTransactionInput[] | Prisma.RefundUncheckedCreateWithoutTransactionInput[]
-  connectOrCreate?: Prisma.RefundCreateOrConnectWithoutTransactionInput | Prisma.RefundCreateOrConnectWithoutTransactionInput[]
-  upsert?: Prisma.RefundUpsertWithWhereUniqueWithoutTransactionInput | Prisma.RefundUpsertWithWhereUniqueWithoutTransactionInput[]
-  createMany?: Prisma.RefundCreateManyTransactionInputEnvelope
-  set?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  disconnect?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  delete?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  connect?: Prisma.RefundWhereUniqueInput | Prisma.RefundWhereUniqueInput[]
-  update?: Prisma.RefundUpdateWithWhereUniqueWithoutTransactionInput | Prisma.RefundUpdateWithWhereUniqueWithoutTransactionInput[]
-  updateMany?: Prisma.RefundUpdateManyWithWhereWithoutTransactionInput | Prisma.RefundUpdateManyWithWhereWithoutTransactionInput[]
-  deleteMany?: Prisma.RefundScalarWhereInput | Prisma.RefundScalarWhereInput[]
-}
-
 export type EnumRefundStatusFieldUpdateOperationsInput = {
   set?: $Enums.RefundStatus
 }
@@ -597,13 +531,11 @@ export type RefundCreateWithoutOrderInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   orderItem: Prisma.OrderItemCreateNestedOneWithoutRefundsInput
-  transaction: Prisma.TransactionCreateNestedOneWithoutRefundsInput
 }
 
 export type RefundUncheckedCreateWithoutOrderInput = {
   id?: string
   orderItemId: string
-  transactionId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status: $Enums.RefundStatus
   reason: string
@@ -644,7 +576,6 @@ export type RefundScalarWhereInput = {
   id?: Prisma.UuidFilter<"Refund"> | string
   orderId?: Prisma.UuidFilter<"Refund"> | string
   orderItemId?: Prisma.UuidFilter<"Refund"> | string
-  transactionId?: Prisma.UuidFilter<"Refund"> | string
   amount?: Prisma.DecimalFilter<"Refund"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumRefundStatusFilter<"Refund"> | $Enums.RefundStatus
   reason?: Prisma.StringFilter<"Refund"> | string
@@ -660,13 +591,11 @@ export type RefundCreateWithoutOrderItemInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   order: Prisma.OrderCreateNestedOneWithoutRefundsInput
-  transaction: Prisma.TransactionCreateNestedOneWithoutRefundsInput
 }
 
 export type RefundUncheckedCreateWithoutOrderItemInput = {
   id?: string
   orderId: string
-  transactionId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status: $Enums.RefundStatus
   reason: string
@@ -700,58 +629,9 @@ export type RefundUpdateManyWithWhereWithoutOrderItemInput = {
   data: Prisma.XOR<Prisma.RefundUpdateManyMutationInput, Prisma.RefundUncheckedUpdateManyWithoutOrderItemInput>
 }
 
-export type RefundCreateWithoutTransactionInput = {
-  id?: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status: $Enums.RefundStatus
-  reason: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  order: Prisma.OrderCreateNestedOneWithoutRefundsInput
-  orderItem: Prisma.OrderItemCreateNestedOneWithoutRefundsInput
-}
-
-export type RefundUncheckedCreateWithoutTransactionInput = {
-  id?: string
-  orderId: string
-  orderItemId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status: $Enums.RefundStatus
-  reason: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type RefundCreateOrConnectWithoutTransactionInput = {
-  where: Prisma.RefundWhereUniqueInput
-  create: Prisma.XOR<Prisma.RefundCreateWithoutTransactionInput, Prisma.RefundUncheckedCreateWithoutTransactionInput>
-}
-
-export type RefundCreateManyTransactionInputEnvelope = {
-  data: Prisma.RefundCreateManyTransactionInput | Prisma.RefundCreateManyTransactionInput[]
-  skipDuplicates?: boolean
-}
-
-export type RefundUpsertWithWhereUniqueWithoutTransactionInput = {
-  where: Prisma.RefundWhereUniqueInput
-  update: Prisma.XOR<Prisma.RefundUpdateWithoutTransactionInput, Prisma.RefundUncheckedUpdateWithoutTransactionInput>
-  create: Prisma.XOR<Prisma.RefundCreateWithoutTransactionInput, Prisma.RefundUncheckedCreateWithoutTransactionInput>
-}
-
-export type RefundUpdateWithWhereUniqueWithoutTransactionInput = {
-  where: Prisma.RefundWhereUniqueInput
-  data: Prisma.XOR<Prisma.RefundUpdateWithoutTransactionInput, Prisma.RefundUncheckedUpdateWithoutTransactionInput>
-}
-
-export type RefundUpdateManyWithWhereWithoutTransactionInput = {
-  where: Prisma.RefundScalarWhereInput
-  data: Prisma.XOR<Prisma.RefundUpdateManyMutationInput, Prisma.RefundUncheckedUpdateManyWithoutTransactionInput>
-}
-
 export type RefundCreateManyOrderInput = {
   id?: string
   orderItemId: string
-  transactionId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status: $Enums.RefundStatus
   reason: string
@@ -767,13 +647,11 @@ export type RefundUpdateWithoutOrderInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   orderItem?: Prisma.OrderItemUpdateOneRequiredWithoutRefundsNestedInput
-  transaction?: Prisma.TransactionUpdateOneRequiredWithoutRefundsNestedInput
 }
 
 export type RefundUncheckedUpdateWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderItemId?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -784,7 +662,6 @@ export type RefundUncheckedUpdateWithoutOrderInput = {
 export type RefundUncheckedUpdateManyWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderItemId?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -795,7 +672,6 @@ export type RefundUncheckedUpdateManyWithoutOrderInput = {
 export type RefundCreateManyOrderItemInput = {
   id?: string
   orderId: string
-  transactionId: string
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   status: $Enums.RefundStatus
   reason: string
@@ -811,13 +687,11 @@ export type RefundUpdateWithoutOrderItemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   order?: Prisma.OrderUpdateOneRequiredWithoutRefundsNestedInput
-  transaction?: Prisma.TransactionUpdateOneRequiredWithoutRefundsNestedInput
 }
 
 export type RefundUncheckedUpdateWithoutOrderItemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -828,51 +702,6 @@ export type RefundUncheckedUpdateWithoutOrderItemInput = {
 export type RefundUncheckedUpdateManyWithoutOrderItemInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
-  transactionId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
-  reason?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type RefundCreateManyTransactionInput = {
-  id?: string
-  orderId: string
-  orderItemId: string
-  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  status: $Enums.RefundStatus
-  reason: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type RefundUpdateWithoutTransactionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
-  reason?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  order?: Prisma.OrderUpdateOneRequiredWithoutRefundsNestedInput
-  orderItem?: Prisma.OrderItemUpdateOneRequiredWithoutRefundsNestedInput
-}
-
-export type RefundUncheckedUpdateWithoutTransactionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderItemId?: Prisma.StringFieldUpdateOperationsInput | string
-  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
-  reason?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type RefundUncheckedUpdateManyWithoutTransactionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
-  orderItemId?: Prisma.StringFieldUpdateOperationsInput | string
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   status?: Prisma.EnumRefundStatusFieldUpdateOperationsInput | $Enums.RefundStatus
   reason?: Prisma.StringFieldUpdateOperationsInput | string
@@ -886,7 +715,6 @@ export type RefundSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   id?: boolean
   orderId?: boolean
   orderItemId?: boolean
-  transactionId?: boolean
   amount?: boolean
   status?: boolean
   reason?: boolean
@@ -894,14 +722,12 @@ export type RefundSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   updatedAt?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   orderItem?: boolean | Prisma.OrderItemDefaultArgs<ExtArgs>
-  transaction?: boolean | Prisma.TransactionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["refund"]>
 
 export type RefundSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   orderId?: boolean
   orderItemId?: boolean
-  transactionId?: boolean
   amount?: boolean
   status?: boolean
   reason?: boolean
@@ -909,14 +735,12 @@ export type RefundSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   updatedAt?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   orderItem?: boolean | Prisma.OrderItemDefaultArgs<ExtArgs>
-  transaction?: boolean | Prisma.TransactionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["refund"]>
 
 export type RefundSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   orderId?: boolean
   orderItemId?: boolean
-  transactionId?: boolean
   amount?: boolean
   status?: boolean
   reason?: boolean
@@ -924,14 +748,12 @@ export type RefundSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   updatedAt?: boolean
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   orderItem?: boolean | Prisma.OrderItemDefaultArgs<ExtArgs>
-  transaction?: boolean | Prisma.TransactionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["refund"]>
 
 export type RefundSelectScalar = {
   id?: boolean
   orderId?: boolean
   orderItemId?: boolean
-  transactionId?: boolean
   amount?: boolean
   status?: boolean
   reason?: boolean
@@ -939,21 +761,18 @@ export type RefundSelectScalar = {
   updatedAt?: boolean
 }
 
-export type RefundOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "orderItemId" | "transactionId" | "amount" | "status" | "reason" | "createdAt" | "updatedAt", ExtArgs["result"]["refund"]>
+export type RefundOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "orderItemId" | "amount" | "status" | "reason" | "createdAt" | "updatedAt", ExtArgs["result"]["refund"]>
 export type RefundInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   orderItem?: boolean | Prisma.OrderItemDefaultArgs<ExtArgs>
-  transaction?: boolean | Prisma.TransactionDefaultArgs<ExtArgs>
 }
 export type RefundIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   orderItem?: boolean | Prisma.OrderItemDefaultArgs<ExtArgs>
-  transaction?: boolean | Prisma.TransactionDefaultArgs<ExtArgs>
 }
 export type RefundIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   orderItem?: boolean | Prisma.OrderItemDefaultArgs<ExtArgs>
-  transaction?: boolean | Prisma.TransactionDefaultArgs<ExtArgs>
 }
 
 export type $RefundPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -961,13 +780,11 @@ export type $RefundPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     order: Prisma.$OrderPayload<ExtArgs>
     orderItem: Prisma.$OrderItemPayload<ExtArgs>
-    transaction: Prisma.$TransactionPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     orderId: string
     orderItemId: string
-    transactionId: string
     amount: runtime.Decimal
     status: $Enums.RefundStatus
     reason: string
@@ -1369,7 +1186,6 @@ export interface Prisma__RefundClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   order<T extends Prisma.OrderDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderDefaultArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   orderItem<T extends Prisma.OrderItemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderItemDefaultArgs<ExtArgs>>): Prisma.Prisma__OrderItemClient<runtime.Types.Result.GetResult<Prisma.$OrderItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  transaction<T extends Prisma.TransactionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TransactionDefaultArgs<ExtArgs>>): Prisma.Prisma__TransactionClient<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1402,7 +1218,6 @@ export interface RefundFieldRefs {
   readonly id: Prisma.FieldRef<"Refund", 'String'>
   readonly orderId: Prisma.FieldRef<"Refund", 'String'>
   readonly orderItemId: Prisma.FieldRef<"Refund", 'String'>
-  readonly transactionId: Prisma.FieldRef<"Refund", 'String'>
   readonly amount: Prisma.FieldRef<"Refund", 'Decimal'>
   readonly status: Prisma.FieldRef<"Refund", 'RefundStatus'>
   readonly reason: Prisma.FieldRef<"Refund", 'String'>
