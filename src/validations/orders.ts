@@ -11,3 +11,11 @@ export const getOrderItemsSchema = z.uuid({
 });
 
 export type GetOrderItemsInput = z.infer<typeof getOrderItemsSchema>;
+
+export const getEligibilityQuerySchema = z.object({
+  orderItemId: z
+    .uuid({ message: "Invalid orderItemId format. Must be a valid UUID." })
+    .optional(),
+});
+
+export type GetEligibilityInput = z.infer<typeof getEligibilityQuerySchema>;
