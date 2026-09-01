@@ -8,6 +8,7 @@ import {
   getEligibilityQuerySchema,
   getOrderItemsSchema,
 } from "@/validations/orders";
+import { checkRefundEligibility } from "@/services/refund-eligibility";
 
 type RouteContext = {
   params: Promise<{ orderId: string }>;
@@ -40,30 +41,6 @@ export async function GET(request: NextRequest, context: RouteContext) {
       return sendError("Validation Error", 400, tree);
     }
 
-    const order = await prisma.order.findUnique({
-      where: {
-        id: orderId,
-        userId,
-      },
-    });
-
-    if (!order) {
-      return sendError("Invalid - orderId", 404);
-    } else if (order.status !== "SUCCESS") {
-      return sendSuccess("Successfully fetched eligibility", 200, {
-        eligibility: false,
-        reason: RejectionReason.ORDER_NOT_SUCCESSFUL,
-      });
-    } else if (
-      new Date().getTime() - new Date(order.createdAt).getTime() >
-      SEVEN_DAYS_IN_MS
-    ) {
-      return sendSuccess("Successfully fetched eligibility", 200, {
-        eligibility: false,
-        reason: RejectionReason.REFUND_WINDOW_EXPIRED,
-      });
-    }
-
     const url = new URL(request.url);
 
     // Extract query parameters into a plain object
@@ -79,62 +56,20 @@ export async function GET(request: NextRequest, context: RouteContext) {
 
     const { orderItemId } = parsedQuery.data;
 
-    if (orderItemId) {
-      const orderItem = await prisma.orderItem.findUnique({
-        where: {
-          id: orderItemId,
-        },
-      });
+    const { error, status, eligibility, reason } = await checkRefundEligibility(
+      {
+        orderId,
+        userId,
+        orderItemId,
+      },
+    );
 
-      if (!orderItem) {
-        return sendError("Invalid - orderItemId", 404);
-      } else if (orderItem.orderId !== orderId || orderItem.userId !== userId) {
-        return sendError("Invalid request", 404);
-      }
-
-      const existingRefunds = await prisma.refund.findUnique({
-        where: {
-          orderId_orderItemId: {
-            orderId,
-            orderItemId,
-          },
-        },
-      });
-
-      if (!existingRefunds) {
-        return sendSuccess("Successfully fetched eligibility", 200, {
-          eligibility: true,
-        });
-      } else {
-        if (existingRefunds.status === "FAILED") {
-          return sendSuccess("Successfully fetched eligibility", 200, {
-            eligibility: true,
-          });
-        } else {
-          return sendSuccess("Successfully fetched eligibility", 200, {
-            eligibility: false,
-            reason: RejectionReason.ALREADY_REFUNDED,
-          });
-        }
-      }
-      // Note no need to check existingRefunds.length > 0 DB has a @@unique([orderId, orderItemId]) constraint
+    if (error) {
+      return sendError(error, status);
     } else {
-      const existingRefunds = await prisma.refund.findMany({
-        where: {
-          orderId,
-        },
-      });
-
-      if (existingRefunds.length > 0) {
-        return sendSuccess("Successfully fetched eligibility", 200, {
-          eligibility: false,
-          reason:
-            RejectionReason.BULK_REFUND_NOT_ALLOWED_WHEN_EXISTING_REFUND_AVAILABLE,
-        });
-      }
-
       return sendSuccess("Successfully fetched eligibility", 200, {
-        eligibility: true,
+        eligibility,
+        reason: reason,
       });
     }
   } catch (error) {
