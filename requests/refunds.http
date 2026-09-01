@@ -1,0 +1,11 @@
+@baseUrl = http://localhost:3000/api
+
+###
+POST {{baseUrl}}/orders/afed7bfc-52c5-4d42-aa26-e8490572ed42/refunds/
+Content-Type: application/json
+Cookie: refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIyZjg1ZDI4MC01MjY0LTQ2ZDktOWI2ZS01MjY1YjY5NDY4ZjAiLCJpYXQiOjE3ODgyMzMyMTEsImV4cCI6MTc4ODgzODAxMX0.sSR9zqs-K5dZXXrxR8Zr-pAHXoFq3Nf30X7y7wUGPwY;access_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIyZjg1ZDI4MC01MjY0LTQ2ZDktOWI2ZS01MjY1YjY5NDY4ZjAiLCJpYXQiOjE3ODgyMzMyMTEsImV4cCI6MTc4ODIzNDExMX0.drnBAjxmvHmO8rPB8oKa9uHZSdUIl46RCSQPdoTcm9g;
+
+{
+    "reason" : "Bad product",
+    "orderItemId": "b6418581-0b62-4959-9cab-9b2b65cafdef"
+}
