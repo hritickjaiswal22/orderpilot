@@ -1,11 +1,15 @@
 @baseUrl = http://localhost:3000/api
 
-###
-POST {{baseUrl}}/orders/afed7bfc-52c5-4d42-aa26-e8490572ed42/refunds/
+### Get refund eligibility
+GET {{baseUrl}}/orders/6145464f-d797-46d0-aa30-7a5a0c016e2f/refunds/eligibility
 Content-Type: application/json
-Cookie: refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIyZjg1ZDI4MC01MjY0LTQ2ZDktOWI2ZS01MjY1YjY5NDY4ZjAiLCJpYXQiOjE3ODgyMzMyMTEsImV4cCI6MTc4ODgzODAxMX0.sSR9zqs-K5dZXXrxR8Zr-pAHXoFq3Nf30X7y7wUGPwY;access_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIyZjg1ZDI4MC01MjY0LTQ2ZDktOWI2ZS01MjY1YjY5NDY4ZjAiLCJpYXQiOjE3ODgyMzMyMTEsImV4cCI6MTc4ODIzNDExMX0.drnBAjxmvHmO8rPB8oKa9uHZSdUIl46RCSQPdoTcm9g;
+Cookie: refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIwMGIwNWQwNC03MjA5LTQxMGUtYmIyZC0zODQwNWU0MGRkNzUiLCJpYXQiOjE3ODg0MjA5MzksImV4cCI6MTc4OTAyNTczOX0.ypMC4ei91Xu6Y_jSliPGtNkzqRP92K4rSAZHuWN7TfM;access_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIwMGIwNWQwNC03MjA5LTQxMGUtYmIyZC0zODQwNWU0MGRkNzUiLCJpYXQiOjE3ODg0MjA5MzksImV4cCI6MTc4ODQyMTgzOX0.w9YmVOJMQp8Gb-PlI6cH3_wW2zVXAT_T-SLmASOyGvc;
+
+### Create Refund
+POST {{baseUrl}}/orders/6dadf607-3155-4d2c-8d7d-157604669bb5/refunds/
+Content-Type: application/json
+Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIwNGU2ZTBkMy1lODVhLTRjMDEtYjA2MS03OGY4NzYxNzgyY2MiLCJpYXQiOjE3ODg0Mzc1MjcsImV4cCI6MTc4ODQzODQyN30.nCzfN2uVXLXfa4G47Cri8IMjk99hcWY1X2CKbXjeSDA;refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIwNGU2ZTBkMy1lODVhLTRjMDEtYjA2MS03OGY4NzYxNzgyY2MiLCJpYXQiOjE3ODg0Mzc1MjcsImV4cCI6MTc4OTA0MjMyN30.0H4yClZD0cJeqiP4x2vlGUstyPRxBZxAoCelhhZ2jY8;
 
 {
-    "reason" : "Bad product",
-    "orderItemId": "b6418581-0b62-4959-9cab-9b2b65cafdef"
+    "reason" : "Bad product"
 }

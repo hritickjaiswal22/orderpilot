@@ -5,5 +5,5 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "userId": "00b05d04-7209-410e-bb2d-38405e40dd75"
+  "userId": "04e6e0d3-e85a-4c01-b061-78f8761782cc"
 }
