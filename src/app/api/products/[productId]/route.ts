@@ -5,6 +5,11 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { sendError, sendSuccess } from "@/lib/api-response";
 import { getProductSchema } from "@/validations/product";
+import {
+  getProductById,
+  ProductNotFoundError,
+  ProductValidationError,
+} from "@/services/product";
 
 // 1. Define the type for context params (Must be a Promise in Next.js 15+)
 type RouteContext = {
@@ -24,32 +29,22 @@ export async function GET(request: NextRequest, context: RouteContext) {
     // 3. Await the params object before accessing properties
     const { productId } = await context.params;
 
-    const result = getProductSchema.safeParse(productId);
-
-    if (!result.success) {
-      const tree = z.treeifyError(result.error);
-      return sendError("Validation Error", 400, tree);
-    }
-
-    const product = await prisma.product.findUnique({
-      where: {
-        id: productId,
-      },
-      select: {
-        id: true,
-        amount: true,
-        description: true,
-        images: true,
-        name: true,
-      },
-    });
-
-    if (!product) {
-      return sendError("Invalid request", 400);
-    }
+    const product = await getProductById(productId);
 
     return sendSuccess("Successfully fetched product", 200, product);
   } catch (error) {
+    if (error instanceof ProductValidationError) {
+      return sendError(
+        "Validation Error - ProductValidationError",
+        400,
+        error.tree,
+      );
+    }
+
+    if (error instanceof ProductNotFoundError) {
+      return sendError("Invalid request - ProductNotFoundError", 400);
+    }
+
     return sendError("Internal Error", 500);
   }
 }

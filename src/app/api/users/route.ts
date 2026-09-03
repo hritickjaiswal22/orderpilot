@@ -10,7 +10,7 @@ import {
   updateUser,
   UserNotFoundError,
   UserValidationError,
-} from "@/services/user-service";
+} from "@/services/user";
 
 export const GET = async (request: NextRequest) => {
   try {
