@@ -5,6 +5,10 @@ import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { sendError, sendSuccess } from "@/lib/api-response";
 import { issueSchema } from "@/validations/support";
+import {
+  createSupportTicket,
+  SupportValidationError,
+} from "@/services/support";
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,27 +21,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
-    const result = issueSchema.safeParse(body);
-
-    if (!result.success) {
-      const tree = z.treeifyError(result.error);
-      return sendError("Invalid request body - issue required", 400);
-    }
-
-    const validIssue = result.data.issue;
-
-    const supportTicket = await prisma.support.create({
-      data: {
-        issue: validIssue,
-        status: "IN_PROGRESS",
-        userId,
-      },
-      select: {
-        id: true,
-        issue: true,
-        status: true,
-      },
-    });
+    const supportTicket = await createSupportTicket(userId, body.issue || "");
 
     return sendSuccess(
       "Successfully created support ticket",
@@ -45,6 +29,13 @@ export async function POST(request: NextRequest) {
       supportTicket,
     );
   } catch (error) {
+    if (error instanceof SupportValidationError) {
+      return sendError(
+        "Invalid request body - issue required",
+        400,
+        error.tree,
+      );
+    }
     return sendError("Internal Error", 500);
   }
 }
