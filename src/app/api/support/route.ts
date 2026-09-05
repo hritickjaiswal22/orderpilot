@@ -1,14 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
+import { NextRequest } from "next/server";
 import { headers } from "next/headers";
 
-import { prisma } from "@/lib/prisma";
 import { sendError, sendSuccess } from "@/lib/api-response";
-import { issueSchema } from "@/validations/support";
-import {
-  createSupportTicket,
-  SupportValidationError,
-} from "@/services/support";
+import { createSupportTicket } from "@/services/support";
+import { AppError } from "@/lib/error";
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,13 +24,10 @@ export async function POST(request: NextRequest) {
       supportTicket,
     );
   } catch (error) {
-    if (error instanceof SupportValidationError) {
-      return sendError(
-        "Invalid request body - issue required",
-        400,
-        error.tree,
-      );
+    if (error instanceof AppError) {
+      return sendError(error.message, error.status, error.error);
     }
+
     return sendError("Internal Error", 500);
   }
 }
