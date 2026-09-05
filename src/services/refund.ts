@@ -6,45 +6,7 @@ import {
   createRefundQuerySchema,
   getOrderItemsSchema,
 } from "@/validations/orders";
-
-// Custom error classes
-export class RefundValidationError extends Error {
-  tree: ReturnType<typeof z.treeifyError> | undefined;
-
-  constructor(message: string, tree?: ReturnType<typeof z.treeifyError>) {
-    super(message);
-    this.name = "RefundValidationError";
-    this.tree = tree;
-  }
-}
-
-export class RefundNotEligibleError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "RefundNotEligibleError";
-  }
-}
-
-export class RefundItemNotFoundError extends Error {
-  constructor(message = "Order item not found") {
-    super(message);
-    this.name = "RefundItemNotFoundError";
-  }
-}
-
-export class RefundAlreadyExistsError extends Error {
-  constructor(message = "Refund already exists for this item") {
-    super(message);
-    this.name = "RefundAlreadyExistsError";
-  }
-}
-
-export class RefundEligibilityCheckError extends Error {
-  constructor(message = "Refund request invalid") {
-    super(message);
-    this.name = "RefundEligibilityCheckError";
-  }
-}
+import { AppError } from "@/lib/error";
 
 // Service function to create a refund for a specific order item or all items
 export async function createRefund(
@@ -58,14 +20,23 @@ export async function createRefund(
   if (!orderIdValidation.success) {
     const tree = z.treeifyError(orderIdValidation.error);
 
-    throw new RefundValidationError("Validation Error", tree);
+    throw new AppError(
+      "One or more request parameters are missing or invalid. - INVALID_REQUEST_PARAMS",
+      400,
+      tree,
+    );
   }
 
   // Validate body (input)
   const bodyValidation = createRefundQuerySchema.safeParse(input);
   if (!bodyValidation.success) {
     const tree = z.treeifyError(bodyValidation.error);
-    throw new RefundValidationError("Validation failed", tree);
+
+    throw new AppError(
+      "The request body is missing, malformed, or contains invalid fields. - INVALID_REQUEST_BODY",
+      400,
+      tree,
+    );
   }
 
   const { orderItemId, reason } = bodyValidation.data;
@@ -86,11 +57,11 @@ export async function createRefund(
     // If error is returned, map to appropriate error class
     // For simplicity, we throw a generic error with status, but you can create a custom error class with status.
     // status is 404
-    throw new RefundEligibilityCheckError(error);
+    throw new AppError(error, 404);
   }
 
   if (!eligibility) {
-    throw new RefundNotEligibleError(eligibilityReason as string);
+    throw new AppError(eligibilityReason as string, 422);
   }
 
   // If orderItemId is provided, handle single item refund
@@ -115,7 +86,10 @@ export async function createRefund(
       });
 
       if (!orderItem) {
-        throw new RefundItemNotFoundError();
+        throw new AppError(
+          "The specified order item does not exist. - ORDER_ITEM_NOT_FOUND",
+          404,
+        );
       }
 
       const refund = await prisma.refund.create({
@@ -146,7 +120,10 @@ export async function createRefund(
       return updatedRefund;
     } else {
       // Existing refund is not failed (e.g., IN_PROGRESS, COMPLETED)
-      throw new RefundAlreadyExistsError();
+      throw new AppError(
+        "The operation cannot be completed because the existing refund is already in progress or completed. - REFUND_NOT_FAILED",
+        409,
+      );
     }
   } else {
     // No orderItemId provided: refund all items in the order
@@ -155,7 +132,10 @@ export async function createRefund(
     });
 
     if (orderItems.length === 0) {
-      throw new RefundItemNotFoundError("No items found for this order");
+      throw new AppError(
+        "No items were found associated with this order. - ORDER_ITEMS_NOT_FOUND",
+        404,
+      );
     }
 
     const refunds = await prisma.$transaction(

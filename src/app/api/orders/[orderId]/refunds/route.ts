@@ -1,15 +1,10 @@
 // app/api/orders/[orderId]/refund/route.ts
 import { NextRequest } from "next/server";
 import { headers } from "next/headers";
+
 import { sendError, sendSuccess } from "@/lib/api-response";
-import {
-  createRefund,
-  RefundValidationError,
-  RefundNotEligibleError,
-  RefundItemNotFoundError,
-  RefundAlreadyExistsError,
-  RefundEligibilityCheckError,
-} from "@/services/refund";
+import { createRefund } from "@/services/refund";
+import { AppError } from "@/lib/error";
 
 type RouteContext = {
   params: Promise<{ orderId: string }>;
@@ -39,20 +34,8 @@ export async function POST(request: NextRequest, context: RouteContext) {
       return sendSuccess("Successfully created refund", 200, refund);
     }
   } catch (error) {
-    if (error instanceof RefundValidationError) {
-      return sendError(error.message, 400, error.tree);
-    }
-    if (error instanceof RefundNotEligibleError) {
-      return sendError(error.message, 400);
-    }
-    if (error instanceof RefundItemNotFoundError) {
-      return sendError(error.message, 404);
-    }
-    if (error instanceof RefundAlreadyExistsError) {
-      return sendError(error.message, 409); // Conflict
-    }
-    if (error instanceof RefundEligibilityCheckError) {
-      return sendError(error.message, 404);
+    if (error instanceof AppError) {
+      return sendError(error.message, error.status, error.error);
     }
     // For eligibility check error with status, you can create a custom class
     return sendError("Internal Error", 500);
