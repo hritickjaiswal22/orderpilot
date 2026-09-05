@@ -2,31 +2,18 @@
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getProductSchema } from "@/validations/product";
-
-// Custom errors
-export class ProductNotFoundError extends Error {
-  constructor(message = "Product not found") {
-    super(message);
-    this.name = "ProductNotFoundError";
-  }
-}
-
-export class ProductValidationError extends Error {
-  tree: ReturnType<typeof z.treeifyError> | undefined;
-
-  constructor(message: string, tree?: ReturnType<typeof z.treeifyError>) {
-    super(message);
-    this.name = "ProductValidationError";
-    this.tree = tree;
-  }
-}
+import { AppError } from "@/lib/error";
 
 export async function getProductById(productId: string) {
   // Validate productId
   const result = getProductSchema.safeParse(productId);
   if (!result.success) {
     const tree = z.treeifyError(result.error);
-    throw new ProductValidationError("Validation Error", tree);
+    throw new AppError(
+      "One or more request parameters are missing or invalid. - INVALID_REQUEST_PARAMS",
+      400,
+      tree,
+    );
   }
 
   const product = await prisma.product.findUnique({
@@ -41,7 +28,10 @@ export async function getProductById(productId: string) {
   });
 
   if (!product) {
-    throw new ProductNotFoundError();
+    throw new AppError(
+      "The product associated with the provided ID does not exist. - PRODUCT_NOT_FOUND",
+      404,
+    );
   }
 
   return product;
