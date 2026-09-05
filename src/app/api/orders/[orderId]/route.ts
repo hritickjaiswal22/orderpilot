@@ -1,11 +1,9 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 import { headers } from "next/headers";
-import { z } from "zod";
 
-import { prisma } from "@/lib/prisma";
 import { sendError, sendSuccess } from "@/lib/api-response";
-import { getOrderItemsSchema } from "@/validations/orders";
-import { getOrderItemsById, OrderValidationError } from "@/services/order";
+import { getOrderItemsById } from "@/services/order";
+import { AppError } from "@/lib/error";
 
 // 1. Define the type for context params (Must be a Promise in Next.js 15+)
 type RouteContext = {
@@ -29,8 +27,8 @@ export async function GET(request: NextRequest, context: RouteContext) {
 
     return sendSuccess("Successfully fetched order items", 200, orderItems);
   } catch (error) {
-    if (error instanceof OrderValidationError) {
-      return sendError("Validation Error", 400, error.tree);
+    if (error instanceof AppError) {
+      return sendError(error.message, error.status, error.error);
     }
 
     return sendError("Internal Error", 500);

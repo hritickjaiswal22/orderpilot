@@ -5,17 +5,7 @@ import {
   getOrdersQuerySchema,
   getOrderItemsSchema,
 } from "@/validations/orders";
-
-// Custom error classes
-export class OrderValidationError extends Error {
-  tree: ReturnType<typeof z.treeifyError> | undefined;
-
-  constructor(message: string, tree?: ReturnType<typeof z.treeifyError>) {
-    super(message);
-    this.name = "OrderValidationError";
-    this.tree = tree;
-  }
-}
+import { AppError } from "@/lib/error";
 
 // Service function to get all orders for a user
 export async function getOrdersByUser(
@@ -27,7 +17,11 @@ export async function getOrdersByUser(
   const validation = getOrdersQuerySchema.safeParse({ sortBy: sortOrder });
   if (!validation.success) {
     const tree = z.treeifyError(validation.error);
-    throw new OrderValidationError("Invalid sort order", tree);
+    throw new AppError(
+      "One or more request parameters are missing or invalid. - INVALID_REQUEST_PARAMS",
+      400,
+      tree,
+    );
   }
 
   const orders = await prisma.order.findMany({
@@ -50,7 +44,11 @@ export async function getOrderItemsById(userId: string, orderId: string) {
   const validation = getOrderItemsSchema.safeParse(orderId);
   if (!validation.success) {
     const tree = z.treeifyError(validation.error);
-    throw new OrderValidationError("Validation Error", tree);
+    throw new AppError(
+      "One or more request parameters are missing or invalid. - INVALID_REQUEST_PARAMS",
+      400,
+      tree,
+    );
   }
 
   const orderItems = await prisma.orderItem.findMany({

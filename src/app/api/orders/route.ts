@@ -1,11 +1,9 @@
 import { NextRequest } from "next/server";
 import { headers } from "next/headers";
-import { z } from "zod";
 
-import { prisma } from "@/lib/prisma";
 import { sendError, sendSuccess } from "@/lib/api-response";
-import { getOrdersQuerySchema } from "@/validations/orders";
-import { getOrdersByUser, OrderValidationError } from "@/services/order";
+import { AppError } from "@/lib/error";
+import { getOrdersByUser } from "@/services/order";
 
 export const GET = async (request: NextRequest) => {
   try {
@@ -26,8 +24,8 @@ export const GET = async (request: NextRequest) => {
 
     return sendSuccess("Successfully fetched orders", 200, orders);
   } catch (error) {
-    if (error instanceof OrderValidationError) {
-      return sendError("Invalid Query params", 400, error.tree);
+    if (error instanceof AppError) {
+      return sendError(error.message, error.status, error.error);
     }
 
     return sendError("Internal Error", 500);
