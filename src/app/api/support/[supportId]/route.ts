@@ -1,10 +1,10 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 import { headers } from "next/headers";
-import { z } from "zod";
 
-import { prisma } from "@/lib/prisma";
 import { sendError, sendSuccess } from "@/lib/api-response";
-import { getSupportTicketSchema } from "@/validations/support";
+
+import { getSupportTicketById } from "@/services/support";
+import { AppError } from "@/lib/error";
 
 // 1. Define the type for context params (Must be a Promise in Next.js 15+)
 type RouteContext = {
@@ -24,27 +24,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
     // 3. Await the params object before accessing properties
     const { supportId } = await context.params;
 
-    const result = getSupportTicketSchema.safeParse(supportId);
-
-    if (!result.success) {
-      const tree = z.treeifyError(result.error);
-      return sendError("Validation Error", 400, tree);
-    }
-
-    const supportTicket = await prisma.support.findUnique({
-      where: {
-        id: supportId,
-      },
-      select: {
-        id: true,
-        issue: true,
-        status: true,
-      },
-    });
-
-    if (!supportTicket) {
-      return sendError("Invalid request", 400);
-    }
+    const supportTicket = await getSupportTicketById(supportId);
 
     return sendSuccess(
       "Successfully fetched support ticket",
@@ -52,6 +32,10 @@ export async function GET(request: NextRequest, context: RouteContext) {
       supportTicket,
     );
   } catch (error) {
+    if (error instanceof AppError) {
+      return sendError(error.message, error.status, error.error);
+    }
+
     return sendError("Internal Error", 500);
   }
 }

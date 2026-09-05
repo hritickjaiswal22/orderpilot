@@ -1,10 +1,9 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 import { headers } from "next/headers";
-import { z } from "zod";
 
-import { prisma } from "@/lib/prisma";
 import { sendError, sendSuccess } from "@/lib/api-response";
-import { getOrderItemsSchema } from "@/validations/orders";
+import { getOrderItemsById } from "@/services/order";
+import { AppError } from "@/lib/error";
 
 // 1. Define the type for context params (Must be a Promise in Next.js 15+)
 type RouteContext = {
@@ -24,35 +23,14 @@ export async function GET(request: NextRequest, context: RouteContext) {
     // 3. Await the params object before accessing properties
     const { orderId } = await context.params;
 
-    const result = getOrderItemsSchema.safeParse(orderId);
-
-    if (!result.success) {
-      const tree = z.treeifyError(result.error);
-      return sendError("Validation Error", 400, tree);
-    }
-
-    const orderItems = await prisma.orderItem.findMany({
-      where: {
-        orderId,
-        order: {
-          userId,
-        },
-      },
-      select: {
-        id: true,
-        originalUnitAmount: true,
-        quantity: true,
-        product: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-    });
+    const orderItems = await getOrderItemsById(userId, orderId);
 
     return sendSuccess("Successfully fetched order items", 200, orderItems);
   } catch (error) {
+    if (error instanceof AppError) {
+      return sendError(error.message, error.status, error.error);
+    }
+
     return sendError("Internal Error", 500);
   }
 }

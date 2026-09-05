@@ -1,10 +1,9 @@
 import { NextRequest } from "next/server";
 import { headers } from "next/headers";
-import { z } from "zod";
 
-import { prisma } from "@/lib/prisma";
 import { sendError, sendSuccess } from "@/lib/api-response";
-import { getOrdersQuerySchema } from "@/validations/orders";
+import { AppError } from "@/lib/error";
+import { getOrdersByUser } from "@/services/order";
 
 export const GET = async (request: NextRequest) => {
   try {
@@ -16,35 +15,19 @@ export const GET = async (request: NextRequest) => {
     }
 
     const searchParams = request.nextUrl.searchParams;
-    const queryParams = {
-      sortBy: searchParams.get("sortBy") ?? undefined,
-    };
-    const result = getOrdersQuerySchema.safeParse(queryParams);
+    const sortBy = searchParams.get("sortBy") ?? undefined;
 
-    if (!result.success) {
-      const tree = z.treeifyError(result.error);
-      return sendError("Invalid Query params", 400, tree);
-    }
+    // Extract sortOrder from query param; default to "asc" if not provided
+    const sortOrder = sortBy === "desc" ? "desc" : "asc";
 
-    const { sortOrder } = result.data;
-
-    const orders = await prisma.order.findMany({
-      where: {
-        userId,
-      },
-      orderBy: {
-        createdAt: sortOrder,
-      },
-      select: {
-        id: true,
-        status: true,
-        originalPaidAmount: true,
-        createdAt: true,
-      },
-    });
+    const orders = await getOrdersByUser(userId, sortOrder);
 
     return sendSuccess("Successfully fetched orders", 200, orders);
   } catch (error) {
+    if (error instanceof AppError) {
+      return sendError(error.message, error.status, error.error);
+    }
+
     return sendError("Internal Error", 500);
   }
 };

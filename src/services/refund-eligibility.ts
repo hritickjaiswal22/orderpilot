@@ -7,10 +7,12 @@ interface EligibilityParams {
 }
 
 enum RejectionReason {
+  ORDER_ALREADY_DELIVERED = "ORDER_ALREADY_DELIVERED",
   ORDER_NOT_SUCCESSFUL = "ORDER_NOT_SUCCESSFUL",
   BULK_REFUND_NOT_ALLOWED_WHEN_EXISTING_REFUND_AVAILABLE = "BULK_REFUND_NOT_ALLOWED_WHEN_EXISTING_REFUND_AVAILABLE",
   REFUND_WINDOW_EXPIRED = "REFUND_WINDOW_EXPIRED",
   ALREADY_REFUNDED = "ALREADY_REFUNDED",
+  REFUND_INPROGRESS = "REFUND_INPROGRESS",
 }
 
 const SEVEN_DAYS_IN_MS = 7 * 24 * 60 * 60 * 1000;
@@ -33,6 +35,12 @@ export async function checkRefundEligibility({
       status: 404,
     };
   } else if (order.status !== "SUCCESS") {
+    if (order.status === "DELIVERED") {
+      return {
+        eligibility: false,
+        reason: RejectionReason.ORDER_ALREADY_DELIVERED,
+      };
+    }
     return {
       eligibility: false,
       reason: RejectionReason.ORDER_NOT_SUCCESSFUL,
@@ -83,6 +91,11 @@ export async function checkRefundEligibility({
       if (existingRefunds.status === "FAILED") {
         return {
           eligibility: true,
+        };
+      } else if (existingRefunds.status === "IN_PROGRESS") {
+        return {
+          eligibility: false,
+          reason: RejectionReason.REFUND_INPROGRESS,
         };
       } else {
         return {
