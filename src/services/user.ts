@@ -2,24 +2,9 @@
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { updateUserSchema } from "@/validations/user";
+import { AppError } from "@/lib/error";
 
 // Custom error classes
-export class UserNotFoundError extends Error {
-  constructor(message = "User not found") {
-    super(message);
-    this.name = "UserNotFoundError";
-  }
-}
-
-export class UserValidationError extends Error {
-  tree: ReturnType<typeof z.treeifyError> | undefined;
-
-  constructor(message: string, tree?: ReturnType<typeof z.treeifyError>) {
-    super(message);
-    this.name = "UserValidationError";
-    this.tree = tree;
-  }
-}
 
 // Service functions
 export async function getUserById(userId: string) {
@@ -34,7 +19,10 @@ export async function getUserById(userId: string) {
   });
 
   if (!user) {
-    throw new UserNotFoundError();
+    throw new AppError(
+      "The user associated with the provided authentication token no longer exists. - USER_NOT_FOUND",
+      404,
+    );
   }
 
   return user;
@@ -48,7 +36,11 @@ export async function updateUser(
   const validation = updateUserSchema.safeParse(updateData);
   if (!validation.success) {
     const tree = z.treeifyError(validation.error);
-    throw new UserValidationError("Invalid request body", tree);
+    throw new AppError(
+      "The request body is missing, malformed, or contains invalid fields. - INVALID_REQUEST_BODY",
+      400,
+      tree,
+    );
   }
 
   // Check user exists
@@ -56,7 +48,10 @@ export async function updateUser(
     where: { id: userId },
   });
   if (!existingUser) {
-    throw new UserNotFoundError();
+    throw new AppError(
+      "The user associated with the provided authentication token no longer exists. - USER_NOT_FOUND",
+      404,
+    );
   }
 
   // Perform update
