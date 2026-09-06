@@ -1,0 +1,20 @@
+@baseUrl = http://localhost:3000/api
+
+POST {{baseUrl}}/chat
+Cookie: access_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiI4NzE0MmM2NS0xM2Y3LTRlOWMtYjhiZC0yOTZkNjA1YjU0ZWQiLCJpYXQiOjE3ODg2MDEwMjUsImV4cCI6MTc4ODYwMTkyNX0.y7grRi89pkvb5nnPmoguXE0obpN9hupqzx8t_9Zj6wM;refresh_token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiI4NzE0MmM2NS0xM2Y3LTRlOWMtYjhiZC0yOTZkNjA1YjU0ZWQiLCJpYXQiOjE3ODg2MDEwMjUsImV4cCI6MTc4OTIwNTgyNX0.UNNmRlHgNn6ycoYLRI6NrvAbVMa8FqM_h3GbUF35nP0;
+Content-Type: application/json;
+
+{
+  "messages": [
+    {
+      "id": "msg-1",
+      "role": "user",
+      "parts": [
+        {
+          "type": "text",
+          "text": "I needed my account details"
+        }
+      ]
+    }
+  ]
+}
