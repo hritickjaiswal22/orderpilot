@@ -41,7 +41,20 @@ export const getCustomerDetailsTool = tool({
 });
 
 export const updateCustomerDetailsTool = tool({
-  description: "Update authenticated customer's details",
+  description: `
+  Update authenticated customer's details
+
+  Before modifying customer information:
+
+  1. Validate the requested values.
+  2. If any value is invalid, do not update that field.
+  3. For valid fields, determine whether the update should proceed.
+  4. You may call getCustomerDetails when current customer state is needed to determine whether an update is necessary.
+  5. Never claim an update occurred unless the update tool successfully completed it.
+
+  When a request contains multiple fields, handle each field independently.
+  Do not let an invalid field automatically prevent valid fields from being updated unless the operation requires atomic validation.
+  `,
   inputSchema: updateUserSchema,
   contextSchema: z.object({
     userId: z.uuid(),
