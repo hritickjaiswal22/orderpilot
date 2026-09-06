@@ -12,7 +12,7 @@ Content-Type: application/json;
       "parts": [
         {
           "type": "text",
-          "text": "I needed my account details"
+          "text": "Update my email to dipali00 and name to Dipali Bhatia"
         }
       ]
     }

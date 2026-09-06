@@ -11,10 +11,14 @@ import {
 } from "ai";
 import { google } from "@ai-sdk/google";
 
-import { getCustomerDetailsTool } from "@/tools/user";
+import {
+  getCustomerDetailsTool,
+  updateCustomerDetailsTool,
+} from "@/tools/user";
 
 const chatTools = {
   getCustomerDetails: getCustomerDetailsTool,
+  updateCustomerDetails: updateCustomerDetailsTool,
 };
 
 // 1. Infer the UI tools type mapping
@@ -70,6 +74,9 @@ export async function POST(request: NextRequest) {
       tools: chatTools,
       toolsContext: {
         getCustomerDetails: {
+          userId: userId || "",
+        },
+        updateCustomerDetails: {
           userId: userId || "",
         },
       },
