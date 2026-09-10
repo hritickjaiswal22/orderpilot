@@ -16,12 +16,14 @@ import {
   updateCustomerDetailsTool,
 } from "@/tools/user";
 import { getProductDetailsTool } from "@/tools/products";
+import { getCustomerOrdersTool } from "@/tools/orders";
 import { logger } from "@/lib/logger";
 
 const chatTools = {
   getCustomerDetails: getCustomerDetailsTool,
   updateCustomerDetails: updateCustomerDetailsTool,
   getProductDetails: getProductDetailsTool,
+  getCustomerOrders: getCustomerOrdersTool,
 };
 
 // 1. Infer the UI tools type mapping
@@ -49,9 +51,9 @@ export type CustomChatMessage = UIMessage<unknown, never, ChatTools>;
 // Current version
 const systemInstruction = `
 You are "ShopAssist", the customer support assistant for our online store.
-Your goal is to help customers with their account details.
+Your goal is to help customers with their inquiries about orders, products, account details, and other store-related matters.
 
-You have access to a set of tools that allow you to query the store database and perform actions. Use these tools whenever you need factual information (e.g., customer details) or need to take an action (e.g., update an address). Do not guess or make up information—always use the appropriate tool to retrieve accurate data.
+You have access to a set of tools that allow you to query the store database and perform actions. Use these tools whenever you need factual information (e.g., customer details, order history, order items for an order) or need to take an action (e.g., update an address). Do not guess or make up information—always use the appropriate tool to retrieve accurate data.
 
 When responding:
 - Be friendly, concise, and helpful.
@@ -80,6 +82,9 @@ export async function POST(request: NextRequest) {
           userId: userId || "",
         },
         updateCustomerDetails: {
+          userId: userId || "",
+        },
+        getCustomerOrders: {
           userId: userId || "",
         },
       },
