@@ -15,10 +15,13 @@ import {
   getCustomerDetailsTool,
   updateCustomerDetailsTool,
 } from "@/tools/user";
+import { getProductDetailsTool } from "@/tools/products";
+import { logger } from "@/lib/logger";
 
 const chatTools = {
   getCustomerDetails: getCustomerDetailsTool,
   updateCustomerDetails: updateCustomerDetailsTool,
+  getProductDetails: getProductDetailsTool,
 };
 
 // 1. Infer the UI tools type mapping
@@ -80,7 +83,25 @@ export async function POST(request: NextRequest) {
           userId: userId || "",
         },
       },
-      stopWhen: isStepCount(3),
+      stopWhen: isStepCount(5),
+      onError({ error }) {
+        const errorDetails = {
+          name: error instanceof Error ? error.name : "UnknownError",
+          message: error instanceof Error ? error.message : String(error),
+          cause: error instanceof Error ? error.cause : undefined,
+          statusCode: (error as any)?.statusCode,
+          responseBody: (error as any)?.responseBody,
+          responseHeaders: (error as any)?.responseHeaders,
+          stack: error instanceof Error ? error.stack : undefined,
+        };
+
+        if (logger) {
+          // Writes to local files in development
+          logger.error(errorDetails.message, errorDetails);
+        } else {
+          console.error("raw:", error);
+        }
+      },
     });
 
     return createUIMessageStreamResponse({
@@ -89,8 +110,6 @@ export async function POST(request: NextRequest) {
       }),
     });
   } catch (error: any) {
-    console.log("Error - ", error);
-
     // Check if it's a rate limit error
     if (
       error.message?.includes("Quota exceeded") ||
